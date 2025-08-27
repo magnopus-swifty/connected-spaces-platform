@@ -102,7 +102,7 @@ class TestParserParseFunction(unittest.TestCase):
     def test_missing_semicolon_wtf(self):
         """ Test that if you leave off the semicolon, parsing fails in an exciting fashion. """
         with self.assertRaisesRegex(Parser.ParserError, ".*(WTF).*"):
-            result = self.__parse_function("void FunctionName()")
+            self.__parse_function("void FunctionName()")
 
     def test_parse_function_no_params(self):
         """ Test parsing a function with no parameters. """
