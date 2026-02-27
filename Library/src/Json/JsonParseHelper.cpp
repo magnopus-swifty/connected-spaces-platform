@@ -41,7 +41,7 @@ rapidjson::Document& ParseWithErrorLogging(rapidjson::Document& Document, const 
 
         const std::string Excerpt(JsonString.c_str() + Start, End - Start);
 
-        CSP_LOG_ERROR_FORMAT("Error: $s: JSON parse error: %s (at offset %zu). Context: %s", LogPrefix, rapidjson::GetParseError_En(ok.Code()),
+        CSP_LOG_ERROR_FORMAT("Error: %s: JSON parse error: %s (at offset %zu). Context: %s", LogPrefix, rapidjson::GetParseError_En(ok.Code()),
             ok.Offset(), Excerpt.c_str());
     }
 
