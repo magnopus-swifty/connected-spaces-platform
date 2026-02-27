@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. For compile
 
 ## [6.28.0]
 
+### 🐛 🔨 Bug Fixes
+
 - [OF-1836] fix: Log errors when parsing malformed JSON by magnopus-swifty
   This is a partial fix to log errors when parsing malformed JSON strings and avoid hitting unwanted assertions.
   A more complete fix will implement error handling logic so calling code can correctly report failures.
