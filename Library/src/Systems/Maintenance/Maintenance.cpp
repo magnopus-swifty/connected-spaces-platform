@@ -15,11 +15,10 @@
  */
 
 #include "CSP/Systems/Maintenance/Maintenance.h"
-
 #include "Services/ApiBase/ApiBase.h"
+#include "Json/JsonParseHelper.h"
 
 #include <algorithm>
-#include <rapidjson/error/en.h>
 
 namespace csp::systems
 {
@@ -42,10 +41,10 @@ void MaintenanceInfoResult::OnResponse(const csp::services::ApiResponseBase* Api
     if (ApiResponse->GetResponseCode() == csp::services::EResponseCode::ResponseSuccess)
     {
         rapidjson::Document JsonDoc;
-        rapidjson::ParseResult ok = JsonDoc.Parse(ApiResponse->GetResponse()->GetPayload().GetContent());
+        rapidjson::ParseResult ok
+            = csp::json::ParseWithErrorLogging(JsonDoc, ApiResponse->GetResponse()->GetPayload().GetContent(), "MaintenanceInfoResult::OnResponse");
         if (!ok)
         {
-            CSP_LOG_ERROR_FORMAT("Error: JSON parse error: %s (at offset %zu)", rapidjson::GetParseError_En(ok.Code()), ok.Offset());
             return;
         }
 

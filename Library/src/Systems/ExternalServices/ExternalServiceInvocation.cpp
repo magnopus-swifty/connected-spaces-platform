@@ -15,9 +15,9 @@
  */
 #include "CSP/Systems/ExternalServices/ExternalServiceInvocation.h"
 #include "Debug/Logging.h"
-
 #include "Services/ApiBase/ApiBase.h"
 #include "Services/aggregationservice/Dto.h"
+#include "Json/JsonParseHelper.h"
 
 #include <regex>
 
@@ -82,10 +82,9 @@ void GetAgoraTokenResult::OnResponse(const services::ApiResponseBase* ApiRespons
     {
         // Extract the Agora token from the observed operation result.
         rapidjson::Document OperationResultJson;
-        rapidjson::ParseResult ok = OperationResultJson.Parse(OperationResult);
+        rapidjson::ParseResult ok = csp::json::ParseWithErrorLogging(OperationResultJson, OperationResult, "GetAgoraTokenResult::OnResponse");
         if (!ok)
         {
-            CSP_LOG_ERROR_FORMAT("Error: JSON parse error: %s (at offset %zu)", rapidjson::GetParseError_En(ok.Code()), ok.Offset());
             return;
         }
 

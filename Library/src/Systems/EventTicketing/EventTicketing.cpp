@@ -308,13 +308,12 @@ void SpaceIsTicketedResult::OnResponse(const csp::services::ApiResponseBase* Api
 
     if (ApiResponse->GetResponseCode() == csp::services::EResponseCode::ResponseSuccess)
     {
-        std::string InputText = Response->GetPayload().GetContent().c_str();
+        auto InputText = Response->GetPayload().GetContent();
 
         rapidjson::Document ResponseJson;
-        rapidjson::ParseResult ok = ResponseJson.Parse(InputText.c_str());
+        rapidjson::ParseResult ok = csp::json::ParseWithErrorLogging(ResponseJson, InputText, "SpaceIsTicketedResult::OnResponse");
         if (!ok)
         {
-            CSP_LOG_ERROR_FORMAT("Error: JSON parse error: %s (at offset %zu)", rapidjson::GetParseError_En(ok.Code()), ok.Offset());
             return;
         }
 

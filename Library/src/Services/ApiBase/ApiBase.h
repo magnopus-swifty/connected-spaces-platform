@@ -21,11 +21,11 @@
 #include "Common/Web/Json.h"
 #include "Common/Web/WebClient.h"
 #include "Debug/Logging.h"
+#include "Json/JsonParseHelper.h"
 #include "Services/DtoBase/DtoBase.h"
 
 #include <list>
 #include <memory>
-#include <rapidjson/error/en.h>
 #include <vector>
 
 namespace csp::services
@@ -82,10 +82,9 @@ public:
         assert(Json.c_str());
 
         rapidjson::Document JsonDoc;
-        rapidjson::ParseResult ok = JsonDoc.Parse(Json.c_str());
+        rapidjson::ParseResult ok = csp::json::ParseWithErrorLogging(JsonDoc, Json, "DtoArray::FromJson");
         if (!ok)
         {
-            CSP_LOG_ERROR_FORMAT("Error: JSON parse error: %s (at offset %zu)", rapidjson::GetParseError_En(ok.Code()), ok.Offset());
             return;
         }
 

@@ -19,13 +19,13 @@
 #include "CSP/Systems/Assets/AssetCollection.h"
 #include "Common/Convert.h"
 #include "Common/Web/Json.h"
+#include "Json/JsonParseHelper.h"
 #include "Services/SpatialDataService/Api.h"
 #include "Services/UserService/Api.h"
 #include "Services/UserService/Dto.h"
 #include "Systems/Spaces/SpaceSystemHelpers.h"
 
 #include <charconv>
-#include <rapidjson/error/en.h>
 #include <regex>
 
 using namespace csp;
@@ -241,10 +241,9 @@ void BasicSpacesResult::FillResultTotalCount(const String& JsonContent)
     assert(JsonContent.c_str());
 
     rapidjson::Document JsonDoc;
-    rapidjson::ParseResult ok = JsonDoc.Parse(JsonContent.c_str());
+    rapidjson::ParseResult ok = csp::json::ParseWithErrorLogging(JsonDoc, JsonContent, "BasicSpacesResult::FillResultTotalCount");
     if (!ok)
     {
-        CSP_LOG_ERROR_FORMAT("Error: JSON parse error: %s (at offset %zu)", rapidjson::GetParseError_En(ok.Code()), ok.Offset());
         return;
     }
 

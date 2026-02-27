@@ -15,14 +15,13 @@
  */
 #include "CSP/Systems/Assets/AssetCollection.h"
 #include "Debug/Logging.h"
-
+#include "Json/JsonParseHelper.h"
 #include "CSP/Common/Systems/Log/LogSystem.h"
 #include "Services/ApiBase/ApiBase.h"
 #include "Services/PrototypeService/Dto.h"
 
 #include <assert.h>
 #include <charconv>
-#include <rapidjson/error/en.h>
 
 namespace chs = csp::services::generated::prototypeservice;
 
@@ -251,10 +250,9 @@ void AssetCollectionsResult::FillResultTotalCount(const csp::common::String& Jso
     assert(JsonContent.c_str());
 
     rapidjson::Document JsonDoc;
-    rapidjson::ParseResult ok = JsonDoc.Parse(JsonContent.c_str());
+    rapidjson::ParseResult ok = csp::json::ParseWithErrorLogging(JsonDoc, JsonContent, "AssetCollectionsResult::FillResultTotalCount");
     if (!ok)
     {
-        CSP_LOG_ERROR_FORMAT("Error: JSON parse error: %s (at offset %zu)", rapidjson::GetParseError_En(ok.Code()), ok.Offset());
         return;
     }
     

@@ -20,8 +20,7 @@
 #include "CSP/Systems/Spaces/UserRoles.h"
 #include "CSP/Systems/Users/UserSystem.h"
 #include "Debug/Logging.h"
-
-#include <rapidjson/error/en.h>
+#include "Json/JsonParseHelper.h"
 
 using namespace csp::common;
 
@@ -82,14 +81,10 @@ namespace SpaceSystemHelpers
     void ConvertJsonMetadataToMapMetadata(const String& JsonMetadata, Map<String, String>& OutMapMetadata)
     {
         rapidjson::Document Json;
-        rapidjson::ParseResult ok = Json.Parse(JsonMetadata.c_str());
+        rapidjson::ParseResult ok = csp::json::ParseWithErrorLogging(Json, JsonMetadata, "ConvertJsonMetadataToMapMetadata");
         if (!ok || !Json.IsObject())
         {
-            if (!ok)
-            {
-                CSP_LOG_ERROR_FORMAT("Error: JSON parse error: %s (at offset %zu)", rapidjson::GetParseError_En(ok.Code()), ok.Offset());
-            }
-            else
+            if (ok)
             {
                 CSP_LOG_MSG(LogLevel::Verbose, "Space JSON metadata is not an object! Returning default metadata values...");
             }
