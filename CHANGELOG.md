@@ -9,6 +9,11 @@ All notable changes to this project will be documented in this file. For compile
 - [OF-1836] fix: Log errors when parsing malformed JSON by magnopus-swifty
   This is a partial fix to log errors when parsing malformed JSON strings and avoid hitting unwanted assertions.
   A more complete fix will implement error handling logic so calling code can correctly report failures.
+  
+### 🍰 🙌 New Features
+
+- [OF-1818] feat: Update AsyncCompletedEventCallback format by MAG-AdamThorn
+  The structure of the AsyncCallCompletedEvent has been updated by the backend services to include additional properties. `ReferenceId` and `ReferenceType` are being replaced by a new `References` Map, and new `Status` and `StatusReason` properties have been added. This change is being made to enable the backend services to communicate more information about the async call. For example in the case of `DuplicateSpaceAsync`, the new References map will contain both the Id of the old space as well as the newly duplicated one. This change is currently behind a backend feature flag. As this will be a breaking change we have added these new properties to the event, but will temporarily be keeping the old ones. We are populating both the old and new properties when we deserialise the SignalR event values, which means that Clients will continue to be able to consume the event as before. Once this CSP change has been adopted by clients we will remove the old properties and transition logic.
 
 ## [6.27.0]
 
