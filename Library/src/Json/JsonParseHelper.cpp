@@ -32,8 +32,8 @@ rapidjson::Document& ParseWithErrorLogging(rapidjson::Document& Document, const 
         // Log the error with some context around where in the string the error occurred.
         const size_t Offset = ok.Offset();
         const size_t TotalLen = JsonString.Length();
-        const size_t Start = Offset > 20 ? Offset - 20 : 0;
-        size_t End = Offset + 20;
+        const size_t Start = Offset > PARSE_ERROR_CONTEXT_CHARS ? Offset - PARSE_ERROR_CONTEXT_CHARS : 0;
+        size_t End = Offset + PARSE_ERROR_CONTEXT_CHARS;
         if (End > TotalLen)
         {
             End = TotalLen;
